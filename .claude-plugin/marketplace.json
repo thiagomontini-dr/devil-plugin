@@ -1,0 +1,14 @@
+{
+  "name": "devil-marketplace",
+  "description": "Marketplace distributing the devil plugin; the plugin description lives in plugin.json (single source)",
+  "owner": {
+    "name": "Thiago Montini",
+    "email": "thiago@digitalrepublic.com.br"
+  },
+  "plugins": [
+    {
+      "name": "devil",
+      "source": "./"
+    }
+  ]
+}
