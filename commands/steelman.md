@@ -1,6 +1,6 @@
 ---
 name: steelman
-description: Build the strongest possible counter-argument, then test the user's position against it
+description: ⚖️ Build the strongest possible counter-argument, then test the user's position against it
 argument-hint: "[light|medium|brutal] <position>"
 ---
 

@@ -29,7 +29,7 @@ A Claude Code plugin (`devil`, marketplace `devil-marketplace`) that packages de
 
 ### Intentional duplication
 
-The critique protocol (rules, output structures, intensity semantics, mandatory footer) is repeated across commands, the agent, and the skill. This is deliberate: each component loads standalone into a fresh context, so none can reference another's file. When changing the protocol, update all copies: `commands/challenge.md`, `commands/steelman.md`, `commands/debate.md`, `commands/decision.md`, `agents/devil-advocate.md`, `skills/devils-advocate/SKILL.md`, plus the README tables.
+The critique protocol (rules, output structures, intensity semantics, mandatory footer) is repeated across commands, the agent, and the skill. This is deliberate: each component loads standalone into a fresh context, so none can reference another's file. When changing the protocol, update all copies: `commands/challenge.md`, `commands/steelman.md`, `commands/debate.md`, `commands/decision.md`, `agents/devil-advocate.md`, `skills/devils-advocate/SKILL.md`, plus the tables in `docs/USER_GUIDE.md` (the user-facing docs are in pt-BR: engaging README at the root, full reference in `docs/USER_GUIDE.md`).
 
 ### Design invariants
 

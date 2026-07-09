@@ -1,6 +1,6 @@
 ---
 name: on
-description: Enable persistent devil mode for this project (optional intensity)
+description: ⚖️ Enable persistent devil mode for this project (optional intensity)
 argument-hint: "[light|medium|brutal]"
 allowed-tools: 'Bash(sh "${CLAUDE_PLUGIN_ROOT}/scripts/devil-mode.sh":*)'
 ---

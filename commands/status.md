@@ -1,6 +1,6 @@
 ---
 name: status
-description: Show whether persistent devil mode is active for this project
+description: ⚖️ Show whether persistent devil mode is active for this project
 allowed-tools: 'Bash(sh "${CLAUDE_PLUGIN_ROOT}/scripts/devil-mode.sh":*)'
 ---
 

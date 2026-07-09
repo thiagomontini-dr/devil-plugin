@@ -1,65 +1,43 @@
 # devil-plugin
 
-Devil's advocate interactions for Claude Code: structured critique, steelman analysis, adversarial debate, decision stress tests, and a persistent devil mode.
+O plugin que faz o Claude Code discordar de você — quando é isso que você precisa.
 
-Created: 2026-07-05
-Last update: 2026-07-08
+## O problema
 
-## Purpose
+Assistentes de IA concordam demais. Existe até nome para isso: *sycophancy* — o viés documentado de LLMs preferirem respostas que validam o usuário a respostas verdadeiras porém desagradáveis. Na prática, significa que sua pior ideia e sua melhor ideia recebem o mesmo "ótima ideia!". Quando você usa a IA para decidir algo importante, esse é um defeito perigoso: você não está pensando melhor, está apenas ouvindo um eco.
 
-LLM assistants have a documented bias toward agreeing with the user (sycophancy), preferring validating answers over truthful but disagreeable ones. Research shows the most effective countermeasure is explicit role assignment: instructing the model to act as a devil's advocate raises genuine disagreement dramatically, provided the prompt also forbids agreement, fixes the output structure, demands concrete falsifiable objections, and re-anchors the instruction in long conversations. This plugin packages those findings as commands, an agent, a skill, and a hook.
+## O que é um advogado do diabo
 
-## Commands
+Advogado do diabo é um papel deliberado de oposição: alguém encarregado de argumentar contra uma posição — não por acreditar no contrário, mas para expor falhas, premissas ocultas e riscos que o entusiasmo esconde. A técnica vem dos processos de canonização da Igreja e sobrevive até hoje em comitês de decisão, red teams e revisões de projeto, porque funciona: oposição estruturada melhora a qualidade das decisões de forma mensurável.
 
-| Command | Arguments | What it does |
-|---------|-----------|--------------|
-| `/devil:challenge` | `[light\|medium\|brutal] <idea or claim>` | One-shot critique: 3 flaws in the reasoning, 1 emotional or cognitive bias, 1 question that could change your mind |
-| `/devil:steelman` | `[light\|medium\|brutal] <position>` | Builds the strongest possible counter-argument first, then critiques your position against it |
-| `/devil:debate` | `[light\|medium\|brutal] <topic>` | Multi-round debate: one new substantive objection per round, no conceding without your pushback, closing table of what survived |
-| `/devil:decision` | `[light\|medium\|brutal] <plan>` | Pre-mortem stress test: 5 reasons it will fail, hidden assumptions, unintended consequences, kill criteria |
-| `/devil:on` | `[light\|medium\|brutal]` | Enables persistent devil mode for the current project |
-| `/devil:off` | - | Disables persistent devil mode |
-| `/devil:status` | - | Shows whether persistent devil mode is active for the current project |
-| `/devil:help` | `[command]` | Usage guide, or the detailed protocol of one command |
+Este plugin transforma o Claude Code nesse opositor sob demanda. Pesquisas mostram que a atribuição explícita do papel — combinada com proibição de concordar, estrutura de saída fixa, exigência de objeções concretas e falsificáveis e reancoragem da instrução em conversas longas — eleva drasticamente a discordância genuína do modelo. O plugin empacota exatamente essas condições.
 
-## Intensity dial
+## O que você ganha
 
-Every mode accepts an optional intensity as the first argument (default `medium`):
+- Falhas encontradas antes do lançamento, não depois.
+- Premissas ocultas explicitadas como afirmações testáveis, com o teste mais barato para cada uma.
+- Critérios objetivos de abandono definidos antes de o custo afundado falar mais alto.
+- Um freio contra o pensamento de grupo — inclusive o grupo formado por você e sua IA.
 
-- `light` - probing questions, respectful tone, concedes genuinely strong points
-- `medium` - direct objections, no praise, concedes only under evidence
-- `brutal` - argues as if the position is completely wrong until proven otherwise
+## Casos de uso
 
-Intensity changes tone and pressure only; the fixed output structures and objection counts never change (too many objections dilute the strongest ones).
+- Antes de uma decisão importante: `/devil:decision` roda um pré-mortem — 5 razões para o plano falhar, premissas ocultas, consequências não intencionais e critérios de abandono.
+- Ao avaliar uma ideia ou argumento: `/devil:challenge` devolve 3 falhas no raciocínio, 1 viés cognitivo e a pergunta que poderia mudar sua opinião.
+- Quando você quer ouvir o outro lado de verdade: `/devil:steelman` constrói a versão mais forte possível da posição contrária antes de criticar a sua.
+- Quando você quer pressão contínua: `/devil:debate` sustenta um debate em rodadas, e `/devil:on` ativa um modo persistente em que todo prompt do projeto recebe ao menos um questionamento substantivo — sem deixar de completar a tarefa.
+- Dentro de outros workflows: o agente `devil-advocate` estressa planos, designs e diffs lendo os arquivos e amarrando cada objeção a linhas específicas.
 
-The advocate always responds in the language the user writes in.
+Todo modo tem um dial de intensidade (`light`, `medium`, `brutal`) e responde no idioma em que você escreve. Toda crítica termina lembrando que é brainstorming estruturado para revisão humana, não contraevidência verificada.
 
-## Persistent devil mode
-
-Research shows the devil's advocate effect decays in long conversations as the instruction scrolls out of context. `/devil:on` solves this: a UserPromptSubmit hook re-injects a compact adversarial instruction on every prompt, so each request gets at least one substantive challenge while the task is still completed.
-
-- State lives in `~/.claude/devil-plugin/state/`, one file per project (the file name is the project basename plus a hash of the full path, so distinct projects never collide; line 1 of the file is the intensity, line 2 the project path).
-- File present means mode on; file absent means off; invalid content falls back to `medium`.
-- A SessionStart hook reminds you when devil mode is active for the project.
-- All hook failure paths degrade silently so prompts are never blocked.
-- State operations are logged to `~/.claude/devil-plugin/state/devil-mode.log`, rotated to a single `.old` generation past 64 KB.
-- Projects that were deleted or moved leave orphaned state files; `sh scripts/devil-mode.sh cleanup` removes every state file whose recorded project directory no longer exists.
-
-## Agent and skill
-
-- `devil-advocate` agent: read-only adversarial critic that other workflows can invoke to stress-test a plan, design, or diff. It reads referenced files and ties every objection to specific lines or facts.
-- `devils-advocate` skill: activates automatically on natural language such as "poke holes in this", "play devil's advocate", "o que pode dar errado", "aponte falhas", and routes to the matching critique structure.
-
-## Installation
+## Instalação
 
 ```
-claude plugin install /path/to/devil-plugin
+/plugin marketplace add thiagomontini-dr/devil-plugin
+/plugin install devil@devil-marketplace
 ```
 
-Components take effect on the next Claude Code session.
+Os componentes passam a valer na próxima sessão do Claude Code.
 
-## Limits
+## Documentação
 
-- Every critique is structured brainstorming for human review, not verified counter-evidence; factual claims still require independent verification.
-- Adversarial interaction measurably improves decision quality but is rated as more effortful and less pleasant; use the intensity dial accordingly.
-- Best trigger points: before major decisions, before launches, and whenever there is unanimous agreement.
+O guia completo — todos os comandos, argumentos, o dial de intensidade, o modo persistente e seus internals — está em [docs/USER_GUIDE.md](docs/USER_GUIDE.md). Dentro do Claude Code, `/devil:help` mostra o mesmo guia sem sair da sessão.

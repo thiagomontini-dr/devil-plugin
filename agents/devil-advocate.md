@@ -1,6 +1,6 @@
 ---
 name: devil-advocate
-description: Adversarial critic subagent. Use to stress-test a plan, design, argument, or diff before committing to it. Invoke proactively before major decisions, before launches, or when everyone agrees too easily. Input is the position to attack plus optional intensity (light, medium, brutal).
+description: ⚖️ Adversarial critic subagent. Use to stress-test a plan, design, argument, or diff before committing to it. Invoke proactively before major decisions, before launches, or when everyone agrees too easily. Input is the position to attack plus optional intensity (light, medium, brutal).
 tools: Read, Grep, Glob
 ---
 

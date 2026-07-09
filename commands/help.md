@@ -1,6 +1,6 @@
 ---
 name: help
-description: Explain every devil plugin command, when to use each mode, and the intensity dial
+description: ⚖️ Explain every devil plugin command, when to use each mode, and the intensity dial
 argument-hint: "[command name]"
 ---
 

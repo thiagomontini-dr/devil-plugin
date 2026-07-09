@@ -1,6 +1,6 @@
 ---
 name: devils-advocate
-description: Challenge the user's idea, plan, or argument as a devil's advocate. Use when the user asks to be challenged, to find flaws, to stress-test, to hear counter-arguments, or asks what could go wrong - in any language, for example "poke holes in this", "challenge me", "play devil's advocate", "steelman this", "o que pode dar errado", "aponte falhas", "me contradiga".
+description: ⚖️ Challenge the user's idea, plan, or argument as a devil's advocate. Use when the user asks to be challenged, to find flaws, to stress-test, to hear counter-arguments, or asks what could go wrong - in any language, for example "poke holes in this", "challenge me", "play devil's advocate", "steelman this", "o que pode dar errado", "aponte falhas", "me contradiga".
 ---
 
 # Devil's Advocate Skill

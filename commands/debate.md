@@ -1,6 +1,6 @@
 ---
 name: debate
-description: Multi-round adversarial debate with anti-convergence rules and a closing survival summary
+description: ⚖️ Multi-round adversarial debate with anti-convergence rules and a closing survival summary
 argument-hint: "[light|medium|brutal] <topic or position>"
 ---
 

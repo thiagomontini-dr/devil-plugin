@@ -1,6 +1,6 @@
 ---
 name: decision
-description: "Pre-decision stress test: failure modes, hidden assumptions, unintended consequences, and kill criteria"
+description: ⚖️ "Pre-decision stress test: failure modes, hidden assumptions, unintended consequences, and kill criteria"
 argument-hint: "[light|medium|brutal] <plan or decision>"
 ---
 

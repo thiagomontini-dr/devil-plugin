@@ -1,6 +1,6 @@
 ---
 name: challenge
-description: One-shot devil's advocate critique of an idea, claim, or argument
+description: ⚖️ One-shot devil's advocate critique of an idea, claim, or argument
 argument-hint: "[light|medium|brutal] <idea or claim>"
 ---
 

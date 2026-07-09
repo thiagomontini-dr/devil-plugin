@@ -1,6 +1,6 @@
 ---
 name: off
-description: Disable persistent devil mode for this project
+description: ⚖️ Disable persistent devil mode for this project
 allowed-tools: 'Bash(sh "${CLAUDE_PLUGIN_ROOT}/scripts/devil-mode.sh":*)'
 ---
 
