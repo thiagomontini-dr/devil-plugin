@@ -1,6 +1,6 @@
 ---
 name: decision
-description: ⚖️ "Pre-decision stress test: failure modes, hidden assumptions, unintended consequences, and kill criteria"
+description: "⚖️ Pre-decision stress test: failure modes, hidden assumptions, unintended consequences, and kill criteria"
 argument-hint: "[light|medium|brutal] <plan or decision>"
 ---
 
@@ -38,7 +38,7 @@ Follow this structure exactly.
 
 ## Mandatory footer
 
-End with this reminder, rendered in the user's language: this stress test is structured brainstorming to stress-test your thinking, not verified counter-evidence. Verify factual claims independently before acting on them.
+End with this reminder, rendered in the user's language: this critique is structured brainstorming to stress-test your thinking, not verified counter-evidence. Verify factual claims independently before acting on them.
 
 ---
 

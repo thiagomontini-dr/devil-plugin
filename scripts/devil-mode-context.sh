@@ -7,20 +7,19 @@
 
 cat > /dev/null 2>&1
 
-COMMON="$(dirname "$0")/devil-mode-common.sh"
+case "$0" in */*) SCRIPT_DIR=${0%/*} ;; *) SCRIPT_DIR=. ;; esac
+COMMON="$SCRIPT_DIR/devil-mode-common.sh"
 [ -f "$COMMON" ] || exit 0
+# shellcheck source=devil-mode-common.sh
 . "$COMMON"
 
-STATE_FILE=$(state_file_for "${CLAUDE_PROJECT_DIR:-$(pwd)}")
+PROJECT=$(canonical_path "${CLAUDE_PROJECT_DIR:-$PWD}")
+STATE_FILE=$(state_file_for "$PROJECT")
 [ -f "$STATE_FILE" ] || exit 0
 
-INTENSITY=$(head -n 1 "$STATE_FILE" 2>/dev/null | tr -d '[:space:]')
-case "$INTENSITY" in
-  light|medium|brutal) ;;
-  *) INTENSITY=medium ;;
-esac
-
-log "context injected (intensity=$INTENSITY)"
+# No log() here: this runs on every prompt, and the injection is fully
+# determined by the state file that on/off already log.
+read_intensity "$STATE_FILE"
 
 cat <<EOF
 <devil-mode intensity="$INTENSITY">

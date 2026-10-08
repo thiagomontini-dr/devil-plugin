@@ -14,29 +14,26 @@
 # State file format: line 1 is the intensity (the only line hooks read),
 # line 2 is the project path, used by cleanup to detect orphaned state.
 
-COMMON="$(dirname "$0")/devil-mode-common.sh"
+case "$0" in */*) SCRIPT_DIR=${0%/*} ;; *) SCRIPT_DIR=. ;; esac
+COMMON="$SCRIPT_DIR/devil-mode-common.sh"
 [ -f "$COMMON" ] || { echo "devil mode: missing $COMMON"; exit 0; }
+# shellcheck source=devil-mode-common.sh
 . "$COMMON"
 
 case "$1" in
-  on) PROJECT="${3:-${CLAUDE_PROJECT_DIR:-$(pwd)}}" ;;
-  *)  PROJECT="${2:-${CLAUDE_PROJECT_DIR:-$(pwd)}}" ;;
+  on) PROJECT="${3:-${CLAUDE_PROJECT_DIR:-$PWD}}" ;;
+  *)  PROJECT="${2:-${CLAUDE_PROJECT_DIR:-$PWD}}" ;;
 esac
+PROJECT=$(canonical_path "$PROJECT")
 STATE_FILE=$(state_file_for "$PROJECT")
-
-mkdir -p "$STATE_DIR" 2>/dev/null
-
-validate_intensity() {
-  case "$1" in
-    light|medium|brutal) printf '%s' "$1" ;;
-    *) printf 'medium' ;;
-  esac
-}
 
 case "$1" in
   on)
+    # Only 'on' creates the state dir; status runs on every SessionStart and
+    # must stay read-only. chmod also tightens dirs made by older versions.
+    mkdir -p "$STATE_DIR" 2>/dev/null && chmod 700 "$STATE_DIR" 2>/dev/null
     [ -d "$STATE_DIR" ] || { echo "devil mode: cannot create state dir $STATE_DIR"; exit 0; }
-    INTENSITY=$(validate_intensity "${2:-medium}")
+    set_intensity "${2:-$DEFAULT_INTENSITY}"
     printf '%s\n%s\n' "$INTENSITY" "$PROJECT" > "$STATE_FILE"
     echo "devil mode ON ($INTENSITY) for $PROJECT"
     log "on ($INTENSITY) for $PROJECT"
@@ -53,7 +50,7 @@ case "$1" in
     ;;
   status)
     if [ -f "$STATE_FILE" ]; then
-      INTENSITY=$(validate_intensity "$(head -n 1 "$STATE_FILE" 2>/dev/null | tr -d '[:space:]')")
+      read_intensity "$STATE_FILE"
       echo "devil mode is ON ($INTENSITY) for $PROJECT. Disable with /devil:off"
     fi
     ;;
