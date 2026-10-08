@@ -3,7 +3,7 @@
 Referência completa dos comandos, argumentos, intensidades, modo persistente e internals do plugin.
 
 Created: 2026-07-08
-Last update: 2026-07-08
+Last update: 2026-10-07
 
 ## Instalação
 
@@ -54,20 +54,22 @@ O advogado sempre responde no idioma em que o usuário escreve.
 
 - Challenge: uma frase neutra reformulando a afirmação, `Flaws in the reasoning` (exatamente 3), `Emotional or cognitive bias` (exatamente 1, nomeado), `The question` (exatamente 1).
 - Steelman: `Steelman` (o caso contrário mais forte possível), `Critique` (até 4 pontos, cada um contra o steelman), `Verdict` (o que sobrevive, o que reconsiderar).
-- Debate: uma objeção forte por rodada com evidência; uma preocupação nova a cada rodada; nunca concede sem contestação substantiva; limite flexível de 5 rodadas; tabela final objeção / contestação / sobreviveu.
+- Debate: uma objeção forte por rodada com evidência; uma preocupação nova a cada rodada; nunca concede sem contestação substantiva (inclusive em `light`); limite flexível de 5 rodadas; tabela final objeção / contestação / sobreviveu.
+- Decision não oferece mitigação, a menos que você peça.
 - Decision: `Reasons this will fail` (exatamente 5, ranqueadas), `Hidden assumptions` (até 4, falsificáveis e com o teste mais barato), `Unintended consequences` (até 3), `Kill criteria` (2 a 3, mensuráveis e com prazo).
 
-Toda crítica termina com o lembrete obrigatório: é brainstorming estruturado para revisão humana, não contraevidência verificada.
+Toda crítica termina com o lembrete obrigatório: é brainstorming estruturado para revisão humana, não contraevidência verificada. No debate, cada rodada traz uma versão de uma linha e o resumo final, a versão completa.
 
 ## Modo devil persistente
 
 O efeito de advogado do diabo decai em conversas longas conforme a instrução sai do contexto. `/devil:on` resolve isso: um hook UserPromptSubmit reinjeta uma instrução adversarial compacta a cada prompt, de modo que toda requisição recebe ao menos um questionamento substantivo enquanto a tarefa ainda é concluída.
 
-- O estado fica em `~/.claude/devil-plugin/state/`, um arquivo por projeto (o nome do arquivo é o basename do projeto mais um hash do path completo, então projetos distintos nunca colidem; a linha 1 do arquivo é a intensidade, a linha 2 é o path do projeto).
+- O estado fica em `~/.claude/devil-plugin/state/`, um arquivo por projeto (o nome do arquivo é o basename do projeto mais um hash do path completo, então projetos distintos nunca colidem; a linha 1 do arquivo é a intensidade, a linha 2 é o path do projeto). O path é canonicalizado antes do hash, então barra final, symlink ou `..` apontam para o mesmo estado.
+- O diretório de estado é criado só por `/devil:on`, com permissão `700`, e os arquivos com `600`; `/devil:status` e o hook SessionStart apenas leem.
 - Arquivo presente significa modo ligado; ausente, desligado; conteúdo inválido cai para `medium`.
 - Um hook SessionStart avisa quando o modo devil está ativo para o projeto.
 - Todas as falhas dos hooks degradam silenciosamente, para que nenhum prompt seja bloqueado.
-- As operações de estado são registradas em `~/.claude/devil-plugin/state/devil-mode.log`, rotacionado para uma única geração `.old` ao passar de 64 KB.
+- As operações `on`, `off` e `cleanup` são registradas em `~/.claude/devil-plugin/state/devil-mode.log` (a injeção a cada prompt não é registrada), rotacionado para uma única geração `.old` ao passar de 64 KB. Se o log for um symlink, nada é escrito.
 - Projetos apagados ou movidos deixam arquivos de estado órfãos; `sh scripts/devil-mode.sh cleanup` remove todo estado cujo diretório registrado não existe mais.
 
 ## Agente e skill
@@ -80,3 +82,7 @@ O efeito de advogado do diabo decai em conversas longas conforme a instrução s
 - Toda crítica é brainstorming estruturado para revisão humana, não contraevidência verificada; afirmações factuais continuam exigindo verificação independente.
 - A interação adversarial melhora de forma mensurável a qualidade das decisões, mas é percebida como mais trabalhosa e menos agradável; use o dial de intensidade de acordo.
 - Melhores momentos para acionar: antes de decisões importantes, antes de lançamentos e sempre que houver concordância unânime.
+
+## Change History
+- Created: 2026-07-08
+- Updated: 2026-10-07 - path canonicalizado, permissões do estado, log apenas em on/off/cleanup, regras de footer e concessão do debate

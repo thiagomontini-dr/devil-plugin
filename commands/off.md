@@ -13,8 +13,10 @@ Disable persistent devil mode for the current project.
 1. Run exactly, replacing `<project-root>` with the absolute path of the current project's root directory (the directory the session was opened in — never the shell's current working directory, which may have drifted):
 
 ```
-sh "${CLAUDE_PLUGIN_ROOT}/scripts/devil-mode.sh" off "<project-root>"
+sh "${CLAUDE_PLUGIN_ROOT}/scripts/devil-mode.sh" off '<project-root>'
 ```
+
+   Wrap the path in single quotes exactly as shown, never double quotes, so the shell cannot expand `$`, backticks, or `\` in a directory name; if the path itself contains a single quote, write that quote as `'\''`.
 
 2. Report the result to the user in their language:
    - If the script confirms deactivation, say devil mode is off and prompts will no longer be challenged.
